@@ -137,6 +137,17 @@ class TestProperty(unittest.TestCase):
         self.assertIn("str_prop", repr_str)
         self.assertIn("42", repr_str)
         self.assertIn("debug=False", repr_str)
+    
+    def test_is_debug_enabled(self):
+        """Test checking debug status."""
+        prop = Property("test_prop", debug=False)
+        self.assertFalse(prop.is_debug_enabled())
+        
+        prop.enable_debug()
+        self.assertTrue(prop.is_debug_enabled())
+        
+        prop.disable_debug()
+        self.assertFalse(prop.is_debug_enabled())
 
 
 class TestPropertyManager(unittest.TestCase):
@@ -204,7 +215,7 @@ class TestPropertyManager(unittest.TestCase):
         prop = manager.add_property("debug_prop", 10)
         
         # The property should have debug enabled
-        self.assertTrue(prop._debug)
+        self.assertTrue(prop.is_debug_enabled())
     
     def test_enable_disable_debug_all(self):
         """Test enabling/disabling debug for all properties."""
@@ -214,13 +225,13 @@ class TestPropertyManager(unittest.TestCase):
         
         # Enable debug for all
         manager.enable_debug_all()
-        self.assertTrue(prop1._debug)
-        self.assertTrue(prop2._debug)
+        self.assertTrue(prop1.is_debug_enabled())
+        self.assertTrue(prop2.is_debug_enabled())
         
         # Disable debug for all
         manager.disable_debug_all()
-        self.assertFalse(prop1._debug)
-        self.assertFalse(prop2._debug)
+        self.assertFalse(prop1.is_debug_enabled())
+        self.assertFalse(prop2.is_debug_enabled())
 
 
 if __name__ == '__main__':

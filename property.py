@@ -6,6 +6,11 @@ from typing import Any, Optional, Callable
 from datetime import datetime
 
 
+# Timestamp format for debug logging (milliseconds precision)
+TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
+TIMESTAMP_TRIM_LENGTH = -3  # Trim to milliseconds
+
+
 class Property:
     """
     A property class that provides getter/setter functionality with debugging support.
@@ -32,7 +37,7 @@ class Property:
     
     def _log(self, message: str):
         """Log a debug message with timestamp."""
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        timestamp = datetime.now().strftime(TIMESTAMP_FORMAT)[:TIMESTAMP_TRIM_LENGTH]
         print(f"[{timestamp}] [Property:{self._name}] {message}")
     
     def get(self) -> Any:
@@ -105,6 +110,15 @@ class Property:
         """Disable debug logging."""
         self._log("Debug mode disabled")
         self._debug = False
+    
+    def is_debug_enabled(self) -> bool:
+        """
+        Check if debug mode is enabled.
+        
+        Returns:
+            True if debug mode is enabled, False otherwise
+        """
+        return self._debug
     
     def __str__(self) -> str:
         """String representation of the property."""
